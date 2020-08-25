@@ -3838,19 +3838,32 @@ Map {
   "HierarchyList" => Object {
     "defaultProps": Object {
       "buttons": null,
+      "cancelMoveClicked": [Function],
       "defaultSelectedId": null,
+      "editingStyle": null,
       "hasMultiSelect": false,
       "hasPagination": true,
       "hasSearch": false,
       "i18n": Object {
+        "allRows": "All rows",
+        "cancel": "Cancel",
         "close": "Close",
         "expand": "Expand",
+        "itemSelected": "%d item selected",
+        "itemTitle": "Move %d item underneath",
+        "itemsSelected": "%d items selected",
+        "itemsTitle": "Move %d items underneath",
+        "modalDescription": "Select a destination",
+        "move": "Move",
         "searchPlaceHolderText": "Enter a value",
       },
       "isFullHeight": false,
       "isLoading": false,
+      "itemWillMove": [Function],
+      "onListUpdated": [Function],
       "onSelect": null,
       "pageSize": null,
+      "sendingData": null,
       "title": null,
     },
     "propTypes": Object {
@@ -3862,8 +3875,22 @@ Map {
         ],
         "type": "arrayOf",
       },
+      "cancelMoveClicked": Object {
+        "type": "func",
+      },
       "defaultSelectedId": Object {
         "type": "string",
+      },
+      "editingStyle": Object {
+        "args": Array [
+          Array [
+            "single",
+            "multiple",
+            "single-nesting",
+            "multiple-nesting",
+          ],
+        ],
+        "type": "oneOf",
       },
       "hasMultiSelect": Object {
         "type": "bool",
@@ -3877,10 +3904,28 @@ Map {
       "i18n": Object {
         "args": Array [
           Object {
+            "allRows": Object {
+              "type": "string",
+            },
+            "cancel": Object {
+              "type": "string",
+            },
             "close": Object {
               "type": "string",
             },
             "expand": Object {
+              "type": "string",
+            },
+            "itemsSelected": Object {
+              "type": "string",
+            },
+            "modalDescription": Object {
+              "type": "string",
+            },
+            "modalTitle": Object {
+              "type": "string",
+            },
+            "move": Object {
               "type": "string",
             },
             "searchPlaceHolderText": Object {
@@ -3896,6 +3941,9 @@ Map {
       "isLoading": Object {
         "type": "bool",
       },
+      "itemWillMove": Object {
+        "type": "func",
+      },
       "items": Object {
         "args": Array [
           Object {
@@ -3905,11 +3953,27 @@ Map {
         "isRequired": true,
         "type": "arrayOf",
       },
+      "onListUpdated": Object {
+        "type": "func",
+      },
       "onSelect": Object {
         "type": "func",
       },
       "pageSize": Object {
         "type": "string",
+      },
+      "sendingData": Object {
+        "args": Array [
+          Array [
+            Object {
+              "type": "bool",
+            },
+            Object {
+              "type": "string",
+            },
+          ],
+        ],
+        "type": "oneOfType",
       },
       "title": Object {
         "type": "string",
@@ -13626,6 +13690,35 @@ Map {
               },
             },
           },
+          "editingStyle": Object {
+            "defaultValue": Object {
+              "computed": false,
+              "value": "null",
+            },
+            "description": "list editing style",
+            "required": false,
+            "type": Object {
+              "name": "enum",
+              "value": Array [
+                Object {
+                  "computed": true,
+                  "value": "EditingStyle.Single",
+                },
+                Object {
+                  "computed": true,
+                  "value": "EditingStyle.Multiple",
+                },
+                Object {
+                  "computed": true,
+                  "value": "EditingStyle.SingleNesting",
+                },
+                Object {
+                  "computed": true,
+                  "value": "EditingStyle.MultipleNesting",
+                },
+              ],
+            },
+          },
           "expandedIds": Object {
             "defaultValue": Object {
               "computed": false,
@@ -13649,6 +13742,17 @@ Map {
             "required": false,
             "type": Object {
               "name": "func",
+            },
+          },
+          "headerOverride": Object {
+            "defaultValue": Object {
+              "computed": false,
+              "value": "null",
+            },
+            "description": "Node to override the default header",
+            "required": false,
+            "type": Object {
+              "name": "node",
             },
           },
           "i18n": Object {
@@ -13701,17 +13805,6 @@ Map {
               ],
             },
           },
-          "isEditing": Object {
-            "defaultValue": Object {
-              "computed": false,
-              "value": "false",
-            },
-            "description": "list can be rearranged",
-            "required": false,
-            "type": Object {
-              "name": "bool",
-            },
-          },
           "isFullHeight": Object {
             "defaultValue": Object {
               "computed": false,
@@ -13743,6 +13836,19 @@ Map {
             "required": false,
             "type": Object {
               "name": "bool",
+            },
+          },
+          "itemWillMove": Object {
+            "defaultValue": Object {
+              "computed": false,
+              "value": "() => {
+  return true;
+}",
+            },
+            "description": "callback function when reorder will occur",
+            "required": false,
+            "type": Object {
+              "name": "func",
             },
           },
           "items": Object {
@@ -13839,17 +13945,6 @@ Map {
               },
             },
           },
-          "selectedId": Object {
-            "defaultValue": Object {
-              "computed": false,
-              "value": "null",
-            },
-            "description": "Currently selected item",
-            "required": false,
-            "type": Object {
-              "name": "string",
-            },
-          },
           "selectedIds": Object {
             "defaultValue": Object {
               "computed": false,
@@ -13890,22 +13985,23 @@ Map {
       },
       "defaultProps": Object {
         "buttons": Array [],
+        "editingStyle": null,
         "expandedIds": Array [],
         "handleSelect": [Function],
+        "headerOverride": null,
         "i18n": Object {
           "close": "Close",
           "expand": "Expand",
           "searchPlaceHolderText": "Enter a value",
         },
         "iconPosition": "left",
-        "isEditing": false,
         "isFullHeight": false,
         "isLargeRow": false,
         "isLoading": false,
+        "itemWillMove": [Function],
         "onItemMoved": [Function],
         "pagination": null,
         "search": null,
-        "selectedId": null,
         "selectedIds": Array [],
         "title": null,
         "toggleExpansion": [Function],
@@ -13919,6 +14015,17 @@ Map {
           ],
           "type": "arrayOf",
         },
+        "editingStyle": Object {
+          "args": Array [
+            Array [
+              "single",
+              "multiple",
+              "single-nesting",
+              "multiple-nesting",
+            ],
+          ],
+          "type": "oneOf",
+        },
         "expandedIds": Object {
           "args": Array [
             Object {
@@ -13929,6 +14036,9 @@ Map {
         },
         "handleSelect": Object {
           "type": "func",
+        },
+        "headerOverride": Object {
+          "type": "node",
         },
         "i18n": Object {
           "args": Array [
@@ -13955,9 +14065,6 @@ Map {
           ],
           "type": "oneOf",
         },
-        "isEditing": Object {
-          "type": "bool",
-        },
         "isFullHeight": Object {
           "type": "bool",
         },
@@ -13966,6 +14073,9 @@ Map {
         },
         "isLoading": Object {
           "type": "bool",
+        },
+        "itemWillMove": Object {
+          "type": "func",
         },
         "items": Object {
           "args": Array [
@@ -14062,9 +14172,6 @@ Map {
           ],
           "type": "shape",
         },
-        "selectedId": Object {
-          "type": "string",
-        },
         "selectedIds": Object {
           "args": Array [
             Object {
@@ -14087,14 +14194,17 @@ Map {
   "SimpleList" => Object {
     "defaultProps": Object {
       "buttons": Array [],
+      "editingStyle": null,
       "hasSearch": false,
       "i18n": Object {
+        "items": "%d items",
         "pageOfPagesText": [Function],
         "searchPlaceHolderText": "Enter a value",
       },
       "isFullHeight": false,
       "isLargeRow": false,
       "isLoading": false,
+      "onListUpdated": [Function],
       "pageSize": null,
     },
     "propTypes": Object {
@@ -14105,6 +14215,17 @@ Map {
           },
         ],
         "type": "arrayOf",
+      },
+      "editingStyle": Object {
+        "args": Array [
+          Array [
+            "single",
+            "multiple",
+            "single-nesting",
+            "multiple-nesting",
+          ],
+        ],
+        "type": "oneOf",
       },
       "hasSearch": Object {
         "type": "bool",
@@ -14176,6 +14297,9 @@ Map {
         ],
         "isRequired": true,
         "type": "arrayOf",
+      },
+      "onListUpdated": Object {
+        "type": "func",
       },
       "pageSize": Object {
         "type": "string",
